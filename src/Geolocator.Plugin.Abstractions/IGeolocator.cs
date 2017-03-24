@@ -10,6 +10,11 @@ namespace Plugin.Geolocator.Abstractions
     /// </summary>
     public interface IGeolocator
     {
+
+        // My Junk
+        // Store the previous position to calculate the bearing and speed.
+        Position PreviousPosition { get; set; }
+
         /// <summary>
         /// Position error event handler
         /// </summary>

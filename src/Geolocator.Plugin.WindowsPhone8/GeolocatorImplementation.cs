@@ -34,6 +34,10 @@ namespace Plugin.Geolocator
         GeoCoordinateWatcher watcher;
         bool isEnabled;
 
+        //// My Junk
+        //// Store the previous position to calculate the bearing and speed.
+        public Position PreviousPosition { get; set; }
+
         public GeolocatorImplementation()
         {
             DesiredAccuracy = 100;

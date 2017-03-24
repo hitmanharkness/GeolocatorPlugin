@@ -44,6 +44,11 @@ namespace Plugin.Geolocator
         readonly object positionSync = new object();
         Position lastPosition;
 
+
+        //// My Junk
+        //// Store the previous position to calculate the bearing and speed.
+        public Position PreviousPosition { get; set; }
+
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -234,6 +239,41 @@ namespace Plugin.Geolocator
             }
 
             return await tcs.Task.ConfigureAwait(false);
+        }
+
+
+        /// <summary>
+        /// MY JUNK
+        /// </summary>
+        /// <param name="timeout"></param>
+        /// <param name="cancelToken"></param>
+        /// <returns></returns>
+        public async Task<Position> GetPositionIncludeCalculatedSpeedBearingAsync(TimeSpan? timeout, CancellationToken? cancelToken = null)
+        {
+            var currentPosition = await GetPositionAsync(timeout, cancelToken);
+
+            // MY JUNK ///////////////////////////////////////////////
+            /// Calculate the speed and heading against the previous point because the GPS returing a single point was often null for both fields.
+            if (PreviousPosition == null)
+            {
+                // We leave the speed and bearing to what we were getting from the actual point which is was inacurate and most times null.
+                PreviousPosition = currentPosition;
+            }
+            else // We have a previous position so's we can do calculations.
+            {
+                double distance = GeolocationUtils.Distance(currentPosition.Latitude, currentPosition.Longitude, PreviousPosition.Latitude, PreviousPosition.Longitude, 'M');
+
+                //https://msdn.microsoft.com/en-us/library/system.datetimeoffset(v=vs.110).aspx
+                TimeSpan timeTaken = ((currentPosition.Timestamp - PreviousPosition.Timestamp));
+                double speed_mile_per_hour = distance / timeTaken.Seconds;
+
+                double bearing = GeolocationUtils.Bearing(PreviousPosition.Latitude, PreviousPosition.Longitude, currentPosition.Latitude, currentPosition.Longitude);
+
+                currentPosition.Speed = speed_mile_per_hour;
+                currentPosition.Heading = bearing;
+
+            }
+            return currentPosition;
         }
 
         /// <summary>

@@ -13,6 +13,10 @@ namespace Plugin.Geolocator
     /// </summary>
     public class GeolocatorImplementation : IGeolocator
     {
+        //// My Junk
+        //// Store the previous position to calculate the bearing and speed.
+        public Position PreviousPosition { get; set; }
+
         /// <summary>
         /// Desired accuracy in meters
         /// </summary>
@@ -56,6 +60,17 @@ namespace Plugin.Geolocator
         /// <returns>Position</returns>
         public Task<Position> GetPositionAsync(TimeSpan? timeout, CancellationToken? token = default(CancellationToken?), bool includeHeading = false)
             => Task.FromResult<Position>(null);
+
+        /// <summary>
+        /// My Junk
+        /// </summary>
+        /// <param name="timeout">Timeout to wait, Default Infinite</param>
+        /// <param name="token">Cancelation token</param>
+        /// <param name="includeHeading">If you would like to include heading</param>
+        /// <returns>Position</returns>
+        public Task<Position> GetPositionIncludeCalculatedSpeedBearingAsync(TimeSpan? timeout, CancellationToken? token = default(CancellationToken?))
+    => Task.FromResult<Position>(null);
+
 
         /// <summary>
         /// Retrieve addresses for position.

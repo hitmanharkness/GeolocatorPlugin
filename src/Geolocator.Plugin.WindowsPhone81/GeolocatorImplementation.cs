@@ -37,6 +37,9 @@ namespace Plugin.Geolocator
         double desiredAccuracy;
         Windows.Devices.Geolocation.Geolocator locator = new Windows.Devices.Geolocation.Geolocator();
 
+        //// My Junk
+        //// Store the previous position to calculate the bearing and speed.
+        public Position PreviousPosition { get; set; }
 
         public GeolocatorImplementation()
         {

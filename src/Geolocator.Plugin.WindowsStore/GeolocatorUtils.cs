@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Windows.Services.Maps;
+//using Windows.Services.Maps;
 
 namespace Plugin.Geolocator
 {
@@ -68,21 +68,5 @@ namespace Plugin.Geolocator
             return (rad / Math.PI * 180.0);
         }
         #endregion
-
-        internal static IEnumerable<Address> ToAddresses(this IEnumerable<MapLocation> addresses)
-        {
-            return addresses.Select(address => new Address
-            {
-                Longitude = address.Point.Position.Longitude,
-                Latitude = address.Point.Position.Latitude,
-                FeatureName = address.DisplayName,
-                PostalCode = address.Address.PostCode,
-                CountryCode = address.Address.CountryCode,
-                CountryName = address.Address.Country,
-                Thoroughfare = address.Address.Street,
-                SubThoroughfare = address.Address.Region,
-                Locality = address.Address.Town
-            });
-        }
     }
 }
